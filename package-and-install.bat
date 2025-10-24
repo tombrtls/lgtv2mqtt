@@ -1,16 +1,18 @@
 @echo off
 
-echo "Compiling service"
+echo "Installing dependencies and building service"
 cd tv-service
-@REM npm run build
-CMD /C "%ProgramFiles%\nodejs\npm" run install
+CMD /C "%ProgramFiles%\nodejs\npm" install
 CMD /C "%ProgramFiles%\nodejs\npm" run build
-echo "Adding stuff"
+echo "Adding service files"
 CMD /C "%ProgramFiles%\nodejs\npm" run postbuild-win
 cd ..
 
-echo "Packaging"
+echo "Packaging app and service"
 CMD /C ares-package tv-app/ tv-service/
 
-echo "Installing"
-CMD /C ares-install .\com.slg.lgtv2mqtt_0.0.1_all.ipk -d tv
+echo "Installing package"
+CMD /C ares-install .\com.slg.lgtv2mqtt_0.0.1_all.ipk -d emulator
+
+echo "Launching app"
+CMD /C ares-launch com.slg.lgtv2mqtt -d emulator
