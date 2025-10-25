@@ -4,17 +4,16 @@
   "description": "LG TV 2 MQTT TV Service",
   "main": "index.js",
   "scripts": {
-    "postbuild-win": "copy \"services.json\" \"dist/\" && copy \"package.json\" \"dist/package.json\"",
-    "postbuild-linux": "cp services.json dist && cp package.json dist/package.json",
-    "build": "node esbuild.config.js",
+    "postbuild-win": "copy \"services.json\" \"dist/\" && copy \"package.json\" \"dist/package.json\" && cd dist && npm install --omit=dev",
+    "postbuild-linux": "cp services.json dist && cp package.json dist/package.json && cd dist && npm install --omit=dev",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "mqtt": "^4.3.7"
+    "mqtt": "^2.0.0"
   },
   "devDependencies": {
     "@types/webos-service": "^0.4.6",
-    "esbuild": "^0.19.0",
     "typescript": "5.3.2"
   },
   "author": "",

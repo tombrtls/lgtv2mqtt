@@ -101,6 +101,9 @@ export class LgTvMqtt {
             // Connect to the MQTT broker
 
             this.logging.log(`Connecting to MQTT server with: ${JSON.stringify(this.mqttConfig)}`);
+            this.logging.log(`Connecting to MQTT server with: ${JSON.stringify(this.mqttConfig)}`);
+            this.logging.log(`Connect method": ${JSON.stringify(connect)}`);
+
 
             this.client = connect(this.connectUrl, this.mqttConfig);
 
@@ -163,11 +166,11 @@ export class LgTvMqtt {
         this.logging.log("Sending Home Assistant auto-discovery configs..")
         // Send the Home Assistant auto-discovery configs
         try {
-            this.client?.publish(this.topicAutoDiscoveryPlayState, this.playStateConfig, this.publicOptionRetain, (err) => this.handleError(err, this.topicAutoDiscoveryPlayState));
+            this.client?.publish(this.topicAutoDiscoveryPlayState, this.playStateConfig, this.publicOptionRetain, (err?: Error) => this.handleError(err, this.topicAutoDiscoveryPlayState));
 
-            this.client?.publish(this.topicAutoDiscoveryAppId, this.appIdConfig, this.publicOptionRetain, (err) => this.handleError(err, this.topicAutoDiscoveryAppId));
+            this.client?.publish(this.topicAutoDiscoveryAppId, this.appIdConfig, this.publicOptionRetain, (err?: Error) => this.handleError(err, this.topicAutoDiscoveryAppId));
 
-            this.client?.publish(this.topicAutoDiscoveryType, this.typeConfig, this.publicOptionRetain, (err) => this.handleError(err, this.topicAutoDiscoveryType));
+            this.client?.publish(this.topicAutoDiscoveryType, this.typeConfig, this.publicOptionRetain, (err?: Error) => this.handleError(err, this.topicAutoDiscoveryType));
         } catch (err) {
             this.logging.log("Failed to publish Home Assistant Auto Discovery configs", `${JSON.stringify(err)}`);
             this.respond(message, {started: false});
@@ -180,7 +183,7 @@ export class LgTvMqtt {
         // Publish initial state
         try {
             let pubOptions: IClientPublishOptions = {qos: 0, retain: false};
-            this.client?.publish(this.topicState, JSON.stringify(this.createState('idle', 'unknown', 'unknown')), pubOptions, (err) => this.handleError(err, this.topicState));
+            this.client?.publish(this.topicState, JSON.stringify(this.createState('idle', 'unknown', 'unknown')), pubOptions, (err?: Error) => this.handleError(err, this.topicState));
         } catch (err) {
             this.logging.log("Failed to send initial MQTT state", `${JSON.stringify(err)}`);
             this.respond(message, {started: false});
@@ -192,7 +195,7 @@ export class LgTvMqtt {
     private publishAvailability(message: Message) {
         // Set availability to online
         try {
-            this.client?.publish(this.topicAvailability, "online", this.publicOptionRetain, (err) => this.handleError(err, this.topicAvailability));
+            this.client?.publish(this.topicAvailability, "online", this.publicOptionRetain, (err?: Error) => this.handleError(err, this.topicAvailability));
         } catch (err) {
             this.logging.log("Failed to set availability to online", `${JSON.stringify(err)}`);
             this.respond(message, {started: false});

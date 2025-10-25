@@ -1,16 +1,13 @@
-echo "Installing dependencies and building service"
+echo "Compiling service"
 cd tv-service || exit
-npm install || exit
-npm run build || exit
-echo "Adding service files"
-npm run postbuild-linux || exit
+npm install
+npm run build
+echo "Adding stuff"
+npm run postbuild-linux
 cd .. || exit
 
-echo "Packaging app and service"
-ares-package tv-app/ tv-service/ || exit
+echo "Packaging"
+ares-package tv-app/ tv-service/
 
-echo "Installing package"
-ares-install com.slg.lgtv2mqtt_0.0.1_all.ipk -d tv || exit
-
-echo "Launching app"
-ares-launch com.slg.lgtv2mqtt -d tv || exit
+echo "Installing"
+ares-install com.slg.lgtv2mqtt_0.0.1_all.ipk -d tv

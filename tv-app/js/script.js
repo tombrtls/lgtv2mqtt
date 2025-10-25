@@ -1,6 +1,8 @@
 document.getElementById("error").innerHTML = 'Javascript file has loaded';
 
 function start() {
+    document.getElementById("data").innerHTML = `Useragent: ${navigator.userAgent}.\r\nAppversion: ${navigator.appVersion}}`;
+
     try {
         webOS.service.request("luna://com.slg.lgtv2mqtt.service/", {
             method: 'start',
@@ -65,19 +67,19 @@ function clearLogs() {
 }
 
 function showSuccess(res) {
-    document.getElementById("error").innerHTML = '';
+    document.getElementById("error").innerHTML = JSON.stringify(res, null, 4);
 
-    document.getElementById("list").innerHTML = '';
-    if (!res.logs || res.logs.length === 0) {
-        let li = document.createElement('li');
-        li.innerHTML += 'no logging available';
-        document.getElementById("list").appendChild(li);
-    }
-    res.logs.forEach(log => {
-        let li = document.createElement('li');
-        li.innerHTML += log;
-        document.getElementById("list").appendChild(li);
-    });
+    // document.getElementById("list").innerHTML = '';
+    // if (!res.json || res.json.length === 0) {
+    //     let li = document.createElement('li');
+    //     li.innerHTML += 'no logging available';
+    //     document.getElementById("list").appendChild(li);
+    // }
+    // res.logs.forEach(log => {
+    //     let li = document.createElement('li');
+    //     li.innerHTML += log;
+    //     document.getElementById("list").appendChild(li);
+    // });
 }
 
 function showFailure(method, err) {
