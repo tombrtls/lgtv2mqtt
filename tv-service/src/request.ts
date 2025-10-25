@@ -1,19 +1,45 @@
-import http from 'http'
+import * as https from 'https';
 
-export function request(options: any, cb: (args: {error: Error | null, data?: any}) => void) {
-  console.log("Starting request")
-  http.get(options, (res: any) => {
-    console.log("Response received")
+interface RequestOptions {
+  hostname: string;
+  path: string;
+  method: string;
+  headers?: { [key: string]: string };
+}
+
+interface CallbackResult {
+  error: Error | null;
+  data?: any;
+}
+
+export function request(options: RequestOptions, cb: (result: CallbackResult) => void): void {
+  console.log(`Making request to: ${options.hostname}${options.path}`);
+  
+  const req = https.get(options, (res) => {
+    console.log(`Response status: ${res.statusCode}`);
+    
     let data = '';
-    res.on('data', (chunk: any) => data += chunk);
+    res.on('data', (chunk) => data += chunk);
     res.on('end', () => {
       try {
-        cb({ error: null, data: JSON.parse(data)});
+        const jsonData = JSON.parse(data);
+        console.log('✅ Success! JSON response received');
+        cb({ error: null, data: jsonData });
       } catch (err) {
-        cb({ error: err as Error, data: null});
+        console.log('❌ JSON parsing failed:', (err as Error).message);
+        cb({ error: err as Error, data: null });
       }
     });
-  }).on('error', (err: Error) => {
-    cb({ error: err, data: null});
-  }).end();
+  });
+  
+  req.on('error', (err) => {
+    console.log('❌ Request failed:', err.message);
+    cb({ error: err, data: null });
+  });
+  
+  req.setTimeout(10000, () => {
+    console.log('❌ Request timeout');
+    req.destroy();
+    cb({ error: new Error('Request timeout'), data: null });
+  });
 }

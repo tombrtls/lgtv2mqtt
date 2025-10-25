@@ -13,6 +13,6 @@
     "importHelpers": false,
     "downlevelIteration": false
   },
-  "include": ["simple-network-test.ts"],
+  "include": ["simple-network-test.ts", "request.ts"],
   "exclude": ["node_modules"]
 }

@@ -63,7 +63,7 @@ RUN npm install --production
 
 # Create test directory and copy built files from builder stage
 RUN mkdir -p ./test
-COPY --from=builder /app/test/simple-network-test.js ./test/
+COPY --from=builder /app/test/*.js ./test/
 
 # Copy other necessary files
 COPY tv-service/services.json ./

@@ -35,7 +35,7 @@ console.log('Current OpenSSL:', currentOpenSSL);
 console.log('OpenSSL match:', currentOpenSSL.indexOf('1.0.2') !== -1 ? '✅ Compatible' : '⚠️  Version mismatch');
 console.log('');
 
-// Simple network request function (same as your request.ts)
+// Simple network request function
 function makeRequest(options: RequestOptions, callback: (result: CallbackResult) => void): void {
     console.log(`Making request to: ${options.hostname}${options.path}`);
     
@@ -70,7 +70,7 @@ function makeRequest(options: RequestOptions, callback: (result: CallbackResult)
     });
 }
 
-// Make the request to Open-Meteo (same as in your code)
+// Make the request to Open-Meteo
 const options: RequestOptions = {
     hostname: 'api.open-meteo.com',
     path: '/v1/forecast?latitude=52.37&longitude=4.9',
