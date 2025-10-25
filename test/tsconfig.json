@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["es5", "dom"],
+    "outDir": "./",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": false,
+    "esModuleInterop": false,
+    "skipLibCheck": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "importHelpers": false,
+    "downlevelIteration": false
+  },
+  "include": ["simple-network-test.ts"],
+  "exclude": ["node_modules"]
+}

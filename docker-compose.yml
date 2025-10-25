@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  lgtv-test:
+    build: .
+    container_name: lgtv-network-test
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=test
+    networks:
+      - lgtv-test-network
+    command: ["node", "test/simple-network-test.js"]
+
+networks:
+  lgtv-test-network:
+    driver: bridge
