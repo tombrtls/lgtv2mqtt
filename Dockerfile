@@ -30,7 +30,11 @@ RUN cd /tmp && \
     cd node-v0.12.2 && \
     export LDFLAGS="-L/usr/local/openssl-1.0.2p/lib" && \
     export CPPFLAGS="-I/usr/local/openssl-1.0.2p/include" && \
-    ./configure --openssl-libpath=/usr/local/openssl-1.0.2p/lib --openssl-includes=/usr/local/openssl-1.0.2p/include && \
+    export PKG_CONFIG_PATH="/usr/local/openssl-1.0.2p/lib/pkgconfig" && \
+    ./configure \
+        --openssl-libpath=/usr/local/openssl-1.0.2p/lib \
+        --openssl-includes=/usr/local/openssl-1.0.2p/include \
+        --shared-openssl && \
     make && \
     make install && \
     cd / && \
@@ -39,6 +43,7 @@ RUN cd /tmp && \
 # Set OpenSSL environment variables
 ENV OPENSSL_CONF=/usr/local/openssl-1.0.2p/openssl.cnf
 ENV LD_LIBRARY_PATH=/usr/local/openssl-1.0.2p/lib:$LD_LIBRARY_PATH
+ENV PKG_CONFIG_PATH=/usr/local/openssl-1.0.2p/lib/pkgconfig:$PKG_CONFIG_PATH
 
 # Stage 2: Build with modern Node.js for TypeScript compilation
 FROM node:24 AS builder
