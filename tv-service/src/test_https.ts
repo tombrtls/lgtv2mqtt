@@ -1,18 +1,6 @@
 #!/usr/bin/env node
 
-import * as https from 'https';
-
-interface RequestOptions {
-    hostname: string;
-    path: string;
-    method: string;
-    headers?: { [key: string]: string };
-}
-
-interface CallbackResult {
-    error: Error | null;
-    data?: any;
-}
+import { request } from './request';
 
 console.log('=== LG WebOS TV Network Test ===');
 console.log('Node.js version:', process.version);
@@ -35,43 +23,8 @@ console.log('Current OpenSSL:', currentOpenSSL);
 console.log('OpenSSL match:', currentOpenSSL.indexOf('1.0.2') !== -1 ? '✅ Compatible' : '⚠️  Version mismatch');
 console.log('');
 
-// Simple network request function
-function makeRequest(options: RequestOptions, callback: (result: CallbackResult) => void): void {
-    console.log(`Making request to: ${options.hostname}${options.path}`);
-    
-    const req = https.get(options, (res) => {
-        console.log(`Response status: ${res.statusCode}`);
-        
-        let data = '';
-        res.on('data', (chunk) => data += chunk);
-        res.on('end', () => {
-            try {
-                const jsonData = JSON.parse(data);
-                console.log('✅ Success! JSON response received');
-                console.log('Response preview:', JSON.stringify(jsonData).substring(0, 200) + '...');
-                callback({ error: null, data: jsonData });
-            } catch (err) {
-                console.log('❌ JSON parsing failed:', (err as Error).message);
-                console.log('Raw response:', data.substring(0, 200) + '...');
-                callback({ error: err as Error, data: null });
-            }
-        });
-    });
-    
-    req.on('error', (err) => {
-        console.log('❌ Request failed:', err.message);
-        callback({ error: err, data: null });
-    });
-    
-    req.setTimeout(10000, () => {
-        console.log('❌ Request timeout');
-        req.destroy();
-        callback({ error: new Error('Request timeout'), data: null });
-    });
-}
-
-// Make the request to Open-Meteo
-const options: RequestOptions = {
+// Make the request to Open-Meteo using the shared request function
+const options = {
     hostname: 'api.open-meteo.com',
     path: '/v1/forecast?latitude=52.37&longitude=4.9',
     method: 'GET',
@@ -80,13 +33,16 @@ const options: RequestOptions = {
     }
 };
 
-makeRequest(options, (result) => {
+console.log('Response preview:', JSON.stringify(options).substring(0, 200));
+
+request(options, (result) => {
     if (result.error) {
         console.log('\n❌ Network test failed:', result.error.message);
         process.exit(1);
     } else {
         console.log('\n🎉 Network test successful!');
         console.log('Your LG WebOS TV environment can make external API calls.');
+        console.log('Data preview:', JSON.stringify(result.data).substring(0, 200) + '...');
         process.exit(0);
     }
 });
