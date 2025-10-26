@@ -10,7 +10,7 @@ services:
       - NODE_ENV=test
     networks:
       - lgtv-test-network
-    command: ["node", "test/simple-network-test.js"]
+    command: ["node", "dist/test_https.js"]
 
 networks:
   lgtv-test-network:

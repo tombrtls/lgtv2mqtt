@@ -1,5 +1,36 @@
 # LG TV 2 MQTT WebOS Service
 For WebOS 6. Maybe it works for earlier or later versions...?
+
+## Build Configuration
+This project is configured to transpile TypeScript to ES5 to ensure compatibility with the LG WebOS TV environment (Node.js v0.12.2 with OpenSSL 1.0.2p).
+
+### Local Development Build
+```shell
+cd tv-service
+npm install
+npm run build
+```
+
+This will transpile all TypeScript files in `src/` to ES5 JavaScript in the `dist/` folder.
+
+### Testing Network Connectivity
+Run the network test to verify the build and network connectivity:
+```shell
+npm test
+```
+
+### Docker Build
+Build and run the Docker container with the LG WebOS TV environment:
+```shell
+docker-compose build
+docker-compose up
+```
+
+The Docker container will:
+1. Build Node.js v0.12.2 with OpenSSL 1.0.2p
+2. Transpile TypeScript to ES5
+3. Run the network test (`test_https.js`)
+
 ## Setup tv
 ### WebOS developer
 [Register as an LG WebOS developer](https://webostv.developer.lge.com/develop/getting-started/developer-mode-app)

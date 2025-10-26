@@ -50,11 +50,17 @@ FROM node:24 AS builder
 
 WORKDIR /app
 
-# Copy test files
-COPY test/ ./test/
+# Copy tv-service files for compilation
+COPY tv-service/ ./tv-service/
 
-# Install dependencies and compile TypeScript test file
-RUN cd test && npm install && npm run build && echo "Files in test directory:" && ls -la && echo "Looking for JS file:" && find . -name "*.js"
+# Install dependencies and compile TypeScript to ES5
+RUN cd tv-service && \
+    npm install && \
+    npm run build && \
+    echo "Build complete - contents of dist:" && \
+    ls -la dist/ && \
+    echo "Checking for test_https.js:" && \
+    ls -la dist/test_https.js
 
 # Stage 3: Final runtime with Node.js 0.12.2 and OpenSSL 1.0.2p
 FROM base-runtime
@@ -66,9 +72,8 @@ WORKDIR /app
 COPY tv-service/package*.json ./
 RUN npm install --production
 
-# Create test directory and copy built files from builder stage
-RUN mkdir -p ./test
-COPY --from=builder /app/test/*.js ./test/
+# Copy built ES5 JavaScript files from builder stage
+COPY --from=builder /app/tv-service/dist ./dist
 
 # Copy other necessary files
 COPY tv-service/services.json ./
@@ -76,5 +81,5 @@ COPY tv-service/services.json ./
 # Expose port for testing
 EXPOSE 3000
 
-# Default command - run the simple network test
-CMD ["node", "test/simple-network-test.js"]
+# Default command - run the test_https.js file
+CMD ["node", "dist/test_https.js"]

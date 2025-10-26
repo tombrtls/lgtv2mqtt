@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig to read more about this file */
-    "outDir": "dist",
+    "target": "es5",
     "module": "commonjs",
     "lib": ["es5", "dom"],
+    "outDir": "dist",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": false,
     "esModuleInterop": false,
@@ -12,5 +12,7 @@
     "noImplicitAny": false,
     "importHelpers": false,
     "downlevelIteration": false
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
